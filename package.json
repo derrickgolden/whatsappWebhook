@@ -1,11 +1,11 @@
 {
   "name": "whatsapp_api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Whatsapp Api using webhook",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
