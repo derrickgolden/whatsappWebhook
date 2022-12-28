@@ -16,7 +16,7 @@ app.get('/webhook',(req,res)=>{
 
     if(mode && verifyToken){
         if(mode == 'subscribe' & verifyToken == myToken){
-            res.write(200,{challenge})
+            res.status(200).send(challenge)
         }else{
             res.status(403)
         }
