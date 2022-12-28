@@ -27,27 +27,33 @@ app.get('/', (req,res)=>{
 })
 
 app.post('/webhook', (req,res)=>{
-    let body = req.body;
+    let body_param = req.body;
     console.log(JSON.stringify(body,null,2))
 
-    let bodyValue = body.entry[0].changes[0].value;
-    if(bodyValue && bodyValue.messages[0].text.body){
-        let bodyMessage = bodyValue.messages[0].text.body;
-        let phoneID = bodyValue.metadata.phone_number_id;
-        let fromNumber = bodyValue.messages[0].from;
+    if(body_param.object){
+        console.log("inside body param");
+        if(body_param.entry && 
+            body_param.entry[0].changes && 
+            body_param.entry[0].changes[0].value.messages && 
+            body_param.entry[0].changes[0].value.messages[0]  
+            ){
+               let phon_no_id=body_param.entry[0].changes[0].value.metadata.phone_number_id;
+               let from = body_param.entry[0].changes[0].value.messages[0].from; 
+               let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
 
         axios({method:'POST',
-                url:`https://graph.facebook.com/v15.0/${phoneID}/messages?access_token=${Token}`,
+                url:`https://graph.facebook.com/v15.0/${phon_no_id}/messages?access_token=${Token}`,
                 data:{
                     messaging_product:"whatsapp",
-                    to:`${fromNumber}`,
+                    to:`${from}`,
                     text:{
-                        body:`Hi.. from the server ${bodyMessage}`
+                        body:`Hi.. from the server ${msg_body}`
                     },
-                    Headers: {"Content-Type": "application/json"}
+                    headers: {"Content-Type": "application/json"}
                 } })
         res.sendStatus(200)
     }else res.sendStatus(404)
+}
 })
 
 app.listen(PORT, ()=>{console.log("Listening on port", PORT)})
